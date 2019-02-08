@@ -1,234 +1,38 @@
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-	
-<link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>try-eat</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/favicon-16x16.png">
+    <!--[if IE]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"><![endif]-->
+    <!-- Add to home screen for Android and modern mobile browsers -->
+    <link rel="manifest" href="<%= htmlWebpackPlugin.files.publicPath %>static/manifest.json">
+    <meta name="theme-color" content="#4DBA87">
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  min-height: 100%;
-  height: 100%;
-}
-
-body {
-  background: #f5f5f5;
-  font-family: "Open Sans", sans-serif;
-  font-size: 14px;
-}
-
-.clearfix {
-  overflow: auto;
-  zoom: 1;
-}
-
-.container {
-  justify-content: center;
-  flex-flow: row wrap;
-}
-
-.todo-wrapper {
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-}
-
-.todo-header {
-  border-radius: 6px 6px 0 0;
-  background: url("https://images.unsplash.com/photo-1452827073306-6e6e661baf57?crop=entropy&fit=crop&fm=jpg&h=975&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1925") no-repeat;
-  background-size: cover;
-  padding: 30px;
-  position: relative;
-}
-.todo-header time {
-  color: white;
-  display: block;
-}
-.todo-header time .day {
-  font-size: 4em;
-  float: left;
-  margin-right: 10px;
-}
-.todo-header time .dayofweek {
-  display: block;
-  margin-top: 13px;
-  font-size: 1.4em;
-  font-weight: 700;
-}
-.todo-header .add-circle {
-  position: absolute;
-  background: #ff3c41;
-  color: white;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  right: 20px;
-  bottom: -20px;
-  box-shadow: 0 0 13px #ff3c41;
-  cursor: pointer;
-}
-
-.todo-form {
-  margin: 15px 0;
-  width: 100%;
-}
-.todo-form input {
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid #E6E6E6;
-  font-family: inherit;
-  padding: 5px 0;
-  outline: none;
-}
-.todo-form input:focus {
-  border-bottom-color: #ff3c41;
-}
-
-.todo-content .todo-content-title {
-  padding: 20px;
-}
-.todo-content .todo-content-title h2 {
-  font-size: 1.5em;
-  font-weight: normal;
-  color: #4C4646;
-}
-.todo-content .todo-content-title .task-report {
-  font-size: 0.9em;
-  color: #afafaf;
-}
-
-.todo-list {
-  list-style: none;
-}
-.todo-list .task-item {
-  padding: 15px 20px;
-  border-top: 1px solid #f1f1f1;
-  position: relative;
-  /* Task actions */
-}
-.todo-list .task-item.task-done .text {
-  color: #ccc;
-}
-.todo-list .task-item .label {
-  display: inline-block;
-  background: #ff3c41;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  float: left;
-  margin-right: 10px;
-}
-.todo-list .task-item .label.normal {
-  background: #37EAA0;
-}
-.todo-list .task-item .text {
-  position: relative;
-  top: -2px;
-}
-.todo-list .task-item .task-action {
-  position: absolute;
-  right: 20px;
-  top: 12px;
-  z-index: 99999;
-}
-.todo-list .task-item .task-action .more {
-  cursor: pointer;
-}
-.todo-list .task-item .task-action .more span {
-  display: inline-block;
-  margin: 0 1px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #D0D0D0;
-}
-.todo-list .task-item .task-action .action-list {
-  position: absolute;
-  right: 0px;
-  top: 23px;
-  border: 1px solid #ccc;
-  list-style: none;
-  padding: 15px 10px;
-  border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
-  display: none;
-}
-.todo-list .task-item .task-action .action-list li {
-  padding: 3px 5px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.todo-list .task-item .task-action .action-list li:hover {
-  background: #0ebeff;
-  color: white;
-  border-radius: 3px;
-}
-</style>
-
-<div id="app" class="container">
-  <div class="todo-wrapper">
-    <div class="todo-header">
-      <time class="clearfix">
-        <span class="day">6</span>
-        <span class="dayofweek">Monday</span>
-        <span class="month">June</span>
-      </time>
-      <div class="add-circle">
-        <i class="fa fa-plus"></i>
-      </div>
-    </div>
-    <div class="todo-content">
-      <div class="todo-content-title">
-        <h2>Your tasks</h2>
-        <p class="task-report"><span class="task-remain">1</span> / 3 tasks</p>
-      </div>
-      <ul class="todo-list">
-        <li class="task-item">
-          <span class="label urgent"></span>
-          <p class="text">Sprint meeting</p>
-          
-          <!-- Task action -->
-          <div class="task-action">
-             <span class="more">
-               <span></span><span></span><span></span>
-             </span>
-            
-             <ul class="action-list">
-               <li>Mark done</li>
-               <li>Edit</li>
-               <li>Delete</li>
-              </ul>
-          </div>
-          <!-- End .task-action -->
-        </li>
-        <li class="task-item task-done">
-          <span class="label urgent"></span>
-          <p class="text">Have lunch with Bill Gates</p>
-        </li>
-        <li class="task-item">
-          <span class="label normal"></span>
-          <p class="text">Export zip</p>
-          
-          <!-- Task action -->
-          <div class="task-action">
-             <span class="more">
-               <span></span><span></span><span></span>
-             </span>
-            
-             <ul class="action-list">
-               <li>Mark done</li>
-               <li>Edit</li>
-               <li>Delete</li>
-              </ul>
-          </div>
-          <!-- End .task-action -->
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="try-eat">
+    <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/safari-pinned-tab.svg" color="#4DBA87">
+    <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="<%= htmlWebpackPlugin.files.publicPath %>static/img/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    <% for (var chunk of webpack.chunks) {
+        for (var file of chunk.files) {
+          if (file.match(/\.(js|css)$/)) { %>
+    <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
+  </head>
+  <body>
+    <noscript>
+      This is your fallback content in case JavaScript fails to load.
+    </noscript>
+    <div id="app"></div>
+    <!-- Todo: only include in production -->
+    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

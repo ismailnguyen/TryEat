@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="ui">
         <h1 class="ui header">
-            Map
+            Near you
         </h1>
 
         <div id="map" class="map"></div>
@@ -11,6 +11,18 @@
 <script>
     import { mapState } from 'vuex'
     import RestaurantItem from '../components/RestaurantItem.vue'
+
+    import * as ol from 'ol';
+    import 'ol/ol.css';
+    import { Map, View, Feature } from 'ol';
+    import TileLayer from 'ol/layer/Tile';
+    import VectorLayer from 'ol/layer/Vector';
+    import OSM from 'ol/source/OSM';
+    import Vector from 'ol/source/Vector';
+    import Point from 'ol/geom/Point';
+    import Style from 'ol/style/Style';
+    import Icon from 'ol/style/Icon';
+    import { fromLonLat, transform } from 'ol/proj';
 
     export default {
         data() {
@@ -27,67 +39,72 @@
         mounted() {
             this.initMap()
 
+            this.setCurrentPosition()
+
             this.addRestaurantsToMap()
         },
         methods: {
             initMap: function () {
-                this.map = new ol.Map({
+                this.map = new Map({
                     target: 'map',
                     layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    })
+                        new TileLayer({
+                            source: new OSM()
+                        })
                     ],
-                    view: new ol.View({
-                        center: ol.proj.fromLonLat([37.41, 8.82]),
+                    view: new View({
+                        center: fromLonLat([37.41, 8.82]),
                         zoom: 4
                     })
                 });
             },
 
+            setCurrentPosition: function () {
+                if (!navigator.geolocation) {
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(this.movePosition);
+            },
+
+            movePosition: function(position) {
+                const coords = fromLonLat([position.coords.longitude, position.coords.latitude]);
+
+                this.map.getView().animate({ center: coords, zoom: 16 });
+
+                this.addMarker({ locationName: 'Me', latitude: position.coords.latitude, longitude: position.coords.longitude });
+            },
+
             addRestaurantsToMap: function () {
                 for(var i = 0; i < this.restaurants.length; i++) {
-
-                    // add markers into map
+                    let restaurant = this.restaurants[i]
+                    fetch(`https://nominatim.openstreetmap.org/search?&format=json&q=${ this.restaurants[i].location }`)
+                    .then(response => response.json())
+                    .then(json => {
+                        if (json.length) {
+                            console.log(json[0])
+                            this.addMarker({ locationName: restaurant.name, longitude: json[0].lon, latitude: json[0].lat })
+                        }
+                    })
                 }
+            },
 
-                var Markers =
-                [
-                    {lat: 41.28247976112171, lng: 28.000645778308126},
-                    {lat: 41.28247976112171, lng: 28.000645778308126}
-                ];
-
-                var features = [];
-
-                for (var i = 0; i < Markers.length; i++) {
-                    var item = Markers[i];
-                    var longitude = item.lng;
-                    var latitude = item.lat;
-
-                    var iconFeature = new ol.Feature({
-                        geometry: new ol.geom.Point(ol.proj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'))
-                    });
-
-                    var iconStyle = new ol.style.Style({
-                        image: new ol.style.Icon(({
+            addMarker: function ({ locationName, longitude, latitude }) {
+                this.map.addLayer(new VectorLayer({
+                    source: new Vector({
+                        features: [
+                            new Feature({
+                                geometry: new Point(transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'))
+                            })
+                        ]
+                    }),
+                    style: new Style({
+                        image: new Icon(({
                             anchor: [0.5, 1],
-                            src: "http://cdn.mapmarker.io/api/v1/pin?text=P&size=50&hoffset=1"
+                            src: `http://cdn.mapmarker.io/api/v1/pin?text=${ locationName }&size=50&hoffset=1`
                         }))
-                    });
-
-                    iconFeature.setStyle(iconStyle);
-                    features.push(iconFeature);
-                }
-
-                var vectorSource = new ol.source.Vector({
-                    features: features
-                });
-
-                var vectorLayer = new ol.layer.Vector({
-                    source: vectorSource
-                });
-
-                this.map.addLayer(vectorLayer);
+                    })
+                }));
             }
         }
     }
@@ -95,7 +112,8 @@
 
 <style scoped>
     .map {
-        height: 400px;
         width: 100%;
+        height: 100%;
+        position:fixed;
       }
 </style>

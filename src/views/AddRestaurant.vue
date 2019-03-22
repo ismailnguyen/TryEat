@@ -2,7 +2,7 @@
     <div class="ui container">
         
         <h1 class="ui header">
-            Restaurant
+            Add a restaurant
         </h1>
 
         <div class="ui form">

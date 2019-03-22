@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="ui container">
         <h1 class="ui header">
             Settings
         </h1>
@@ -24,7 +24,7 @@
             <button class="ui button" type="submit" @click="updateProfile()">Update</button>
         </form>
 
-         <a class="negative fluid ui button" @click="logout()">
+         <a class="negative ui button signout-button" @click="logout()">
             <i class="big sign-out icon"></i>
             Sign out
         </a>
@@ -74,3 +74,14 @@
         }
     }
 </script>
+
+<style scoped>
+    .signout-button {
+        position: fixed;
+        bottom: 70px;
+        width: 90%;
+        margin: auto;
+        right: 0;
+        left: 0;
+    }
+</style>

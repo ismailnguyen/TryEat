@@ -14,11 +14,11 @@
             </div>
         </div>
         <div class="extra content">
-            <span class="left floated like">
+            <span class="left floated like" @click="edit">
                 <i class="edit icon"></i>
                 Edit
             </span>
-            <span class="right floated star">
+            <span class="right floated star" @click="remove">
                 <i class="x icon"></i>
                 Delete
             </span>
@@ -27,11 +27,31 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+    const firebase = require('../firebaseConfig.js')
+
     export default {
         props: ['restaurant'],
         data() {
             return {
-                showDetails: false
+                editMode: false
+            }
+        },
+        computed: {
+            ...mapState(['userProfile', 'restaurants'])
+        },
+        methods: {
+            remove: function () {
+                firebase.restaurantsCollection
+                .doc(this.restaurant.id)
+                .delete()
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+
+            edit: function() {
+                this.editMode = !this.editMode
             }
         }
     }

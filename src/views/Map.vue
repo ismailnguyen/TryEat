@@ -1,8 +1,7 @@
 <template>
     <div class="ui">
-        <h1 class="ui header">
-            Near you
-        </h1>
+        <Header :title="title" />
+        
 
         <div id="map" class="map"></div>
     </div>
@@ -10,6 +9,7 @@
 
 <script>
     import { mapState } from 'vuex'
+    import Header from '../components/Header.vue'
     import RestaurantItem from '../components/RestaurantItem.vue'
 
     import * as ol from 'ol';
@@ -27,10 +27,12 @@
     export default {
         data() {
             return {
+                title: 'Near you',
                 map: null
             }
         },
         components: {
+            Header,
             RestaurantItem
         },
         computed: {

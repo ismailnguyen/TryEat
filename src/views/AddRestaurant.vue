@@ -1,9 +1,7 @@
 <template>
     <div class="ui container">
         
-        <h1 class="ui header">
-            Add a restaurant
-        </h1>
+        <Header :title="title" />
 
         <div class="ui form">
             <div class="field">
@@ -31,6 +29,7 @@
             </div>
 
             <div class="ui fluid submit button" @click="add()" :disabled="restaurant.name == ''">Submit</div>
+            <div class="ui fluid negative basic button" @click="cancel()">Cancel</div>
         </div>
     </div>
 </template>
@@ -38,10 +37,12 @@
 <script>
     import { mapState } from 'vuex'
     const firebase = require('../firebaseConfig.js')
+    import Header from '../components/Header.vue'
 
     export default {
         data() {
             return {
+                title: 'Add a restaurant',
                 restaurant: {
                     name: '',
                     description: '',
@@ -49,6 +50,9 @@
                 },
                 showMoreFields: false
             }
+        },
+        components: {
+            Header
         },
         computed: {
             ...mapState(['currentUser', 'userProfile'])
@@ -71,6 +75,10 @@
                 .catch(error => {
                     console.log(error)
                 })
+            },
+
+            cancel() {
+                this.$router.push('/')
             }
         }
     } 

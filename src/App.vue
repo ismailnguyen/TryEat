@@ -25,8 +25,8 @@
   }
   
   body {
-    /* background: #292e4f; */
-    color: #acbfd9;
+    background: #292e4f;
+    color: #ffffff;
   }
 
   .primary-color {
@@ -37,17 +37,9 @@
     color: #eb4b8a;
   }
 
-  .ui.header {
-    text-align: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 999;
-    background: #acbfd9ab;
-  }
-
   .ui.menu.item {
     background: #acbfd9ab;
+    color: #ffffff;
   }
 
   .ui.menu .active.item:hover {
@@ -58,16 +50,15 @@
     color: #eb4b8a;
   }
 
-  .ui.header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-  }
-
-  .container {
-    padding-top: 60px;
+  .ui.container {
+    padding-top: 100px;
     padding-left: 25px;
     padding-right: 25px;
+  }
+
+  .ui.form .field>label,
+  .ui.toggle.checkbox .box,
+  .ui.toggle.checkbox label {
+    color: #ffffff;
   }
 </style>

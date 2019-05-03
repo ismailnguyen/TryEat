@@ -1,9 +1,9 @@
 <template>
     <div class="ui container">
-        <h1 class="ui header">
-            Settings
-        </h1>
-        <p>Update your profile</p>
+        
+        <Header :title="title" />
+
+        <p>My profile</p>
 
         <div class="ui success message" v-if="showSuccess">
             <i class="close icon"></i>
@@ -34,13 +34,18 @@
 <script>
     import { mapState } from 'vuex'
     const firebase = require('../firebaseConfig.js')
+    import Header from '../components/Header.vue'
 
     export default {
         data () {
             return {
+                title: 'Settings',
                 name: '',
                 showSuccess: false
             }
+        },
+        components: {
+            Header
         },
         computed: {
         ...mapState(['currentUser', 'userProfile'])

@@ -1,17 +1,11 @@
 <template>
     <footer>
-        <div class="ui four item menu">
+        <div class="ui two item menu">
             <router-link class="item" to="dashboard" active-class="active">
-                <i class="big home icon"></i>
+                <i class="big bookmark icon"></i>
             </router-link>
             <router-link class="item" to="map" active-class="active">
                 <i class="big map icon"></i>
-            </router-link>
-            <router-link class="item" to="add-restaurant" active-class="active">
-                <i class="big plus icon"></i>
-            </router-link>
-            <router-link class="item" to="settings" active-class="active">
-                <i class="big cog icon"></i>
             </router-link>
         </div>
     </footer>

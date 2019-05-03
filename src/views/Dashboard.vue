@@ -1,8 +1,6 @@
 <template>
     <div class="ui container">
-        <h1 class="ui header">
-            Try Eat
-        </h1>
+        <Header :title="title" />
 
         <div class="ui stackable cards" v-if="restaurants.length">
             <RestaurantItem v-for="(restaurant, index) in restaurants" v-bind:key="index" :restaurant="restaurant" />
@@ -16,10 +14,17 @@
 
 <script>
     import { mapState } from 'vuex'
+    import Header from '../components/Header.vue'
     import RestaurantItem from '../components/RestaurantItem.vue'
 
     export default {
+        data() {
+            return {
+                title: 'Try Eat'
+            }
+        },
         components: {
+            Header,
             RestaurantItem
         },
         computed: {
@@ -27,4 +32,3 @@
         }
     }
 </script>
-

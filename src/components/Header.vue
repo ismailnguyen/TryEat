@@ -29,6 +29,8 @@
         top: 0;
         right: 0;
         left: 0;
+        background: #292e4fa1;
+        z-index: 999;
     }
 
     .ui.segment, .ui.menu {

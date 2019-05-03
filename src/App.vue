@@ -37,13 +37,13 @@
     color: #eb4b8a;
   }
 
-  .ui.menu.item {
-    background: #acbfd9ab;
+  .ui.menu .item {
+    background: #292e4fa1;
     color: #ffffff;
   }
 
   .ui.menu .active.item:hover {
-    background: #acbfd9;
+    background: #292e4fa1;
   }
 
   .ui.menu .active.item, .ui.menu .active.item:hover {
@@ -52,6 +52,7 @@
 
   .ui.container {
     padding-top: 100px;
+    padding-bottom: 100px;
     padding-left: 25px;
     padding-right: 25px;
   }

@@ -1,15 +1,17 @@
 <template>
     <div class="ui container">
+
         <div class="ui segment" v-if="performingRequest">
             <div class="ui active dimmer">
-                <div class="ui loader"></div>
+                <div class="ui massive text loader"></div>
             </div>
         </div>
 
         <div class="ui form error" v-if="!performingRequest">
 
+            <img class="ui centered bordered circular image" src="static/img/icons/favicon_128.png" alt="">
+
             <h2 class="ui center aligned header">
-                <img class="ui medium bordered circular image" src="static/img/icons/favicon_128.png" alt="" width="128" height="128">
                 Please sign in
             </h2>
 
@@ -28,11 +30,11 @@
                 <p>{{error.message}}</p>
             </div>
             
-            <div class="ui fluid submit button" @click="login">Sign in</div>
-        </div>
+            <button class="ui fluid submit button" type="submit" @click="login()" :disabled="email == '' || password == ''">Sign in</button>
 
-        <p class="mt-5 mb-3 text-muted"><router-link to="/register">Don't have account ? Sign up</router-link></p>
-        <p class="mt-5 mb-3 text-muted"><router-link to="/reset-password">Forgot password ?</router-link></p>
+            <p class="mt-5 mb-3 text-muted"><router-link to="/register">Don't have account ? Sign up</router-link></p>
+            <p class="mt-5 mb-3 text-muted"><router-link to="/reset-password">Forgot password ?</router-link></p>
+        </div>
     </div>
 </template>
 
@@ -63,10 +65,10 @@
                     this.performingRequest = false
                     this.$router.push('/dashboard')
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(error => {
+                    console.log(error)
                     this.performingRequest = false
-                    this.error = err
+                    this.error = error
                 })
             }
         }
@@ -74,51 +76,17 @@
 </script>
 
 <style scoped>
-    .form-control {
-        color: black;
+    .ui.header {
+        color: white;
+    }
+
+    .ui.segment {
+        padding-top: 450px;
+        background: none;
         border: none;
-        border-radius: 0.75rem;
-        background-color: #ced4da70;
     }
 
-    .form-control::placeholder {
-        color: #fff;
-        opacity: 1;
-    }
-
-    .form-signin {
-        width: 100%;
-        max-width: 330px;
-        padding: 15px;
-        margin: auto;
-    }
-
-    .form-signin .checkbox {
-        font-weight: 400;
-    }
-
-    .form-signin .form-control {
-        opacity: 0.9;
-        position: relative;
-        box-sizing: border-box;
-        height: auto;
-        padding: 10px;
-        font-size: 16px;
-    }
-
-    .form-signin .form-control:focus {
-        z-index: 2;
-    }
-
-    .form-signin input[type="email"] {
-        margin-bottom: -1px;
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    .form-signin input[type="password"] {
-        margin-bottom: 10px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
+    .ui.dimmer {
+        background: none;
     }
 </style>

@@ -1,7 +1,9 @@
 <template>
     <div class="ui container">
-        
-        <Header :title="title" />
+
+        <Header />
+
+        <h1>Add a restaurant</h1>
 
         <div class="ui form">
             <div class="field">
@@ -28,8 +30,9 @@
                 </div>
             </div>
 
-            <div class="ui fluid submit button" @click="add()" :disabled="restaurant.name == ''">Submit</div>
-            <div class="ui fluid negative basic button" @click="cancel()">Cancel</div>
+            <button class="ui inverted basic button" type="submit" @click="cancel()">Cancel</button>
+            <button class="ui submit button" type="submit" @click="add()" :disabled="restaurant.name == ''">Add</button>
+
         </div>
     </div>
 </template>
@@ -42,7 +45,6 @@
     export default {
         data() {
             return {
-                title: 'Add a restaurant',
                 restaurant: {
                     name: '',
                     description: '',
@@ -58,7 +60,7 @@
             ...mapState(['currentUser', 'userProfile'])
         },
         methods: {
-            add() {
+            add: function () {
                 firebase.restaurantsCollection
                 .add({
                     createdOn: new Date(),
@@ -72,12 +74,10 @@
                     this.restaurant.description = ''
                     this.restaurant.location = ''
                 })
-                .catch(error => {
-                    console.log(error)
-                })
+                .catch(console.log)
             },
 
-            cancel() {
+            cancel: function () {
                 this.$router.push('/')
             }
         }

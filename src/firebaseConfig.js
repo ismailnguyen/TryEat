@@ -13,7 +13,7 @@ const config = {
 firebase.initializeApp(config)
 
 firebase.firestore().enablePersistence()
-.catch(error => console.log(error))
+.catch(console.log)
 
 // firebase utils
 const db = firebase.firestore()

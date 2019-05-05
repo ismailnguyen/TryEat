@@ -37,16 +37,18 @@
     color: #eb4b8a;
   }
 
-  .ui.menu .item {
+  .ui.menu {
     background: #292e4fa1;
     color: #ffffff;
   }
 
-  .ui.menu .active.item:hover {
-    background: #292e4fa1;
+  .ui.menu .item {
+    color: #ffffff;
   }
-
-  .ui.menu .active.item, .ui.menu .active.item:hover {
+  
+  .ui.menu .active.item,
+  .ui.menu .active.item:hover {
+    background: #292e4fe6;
     color: #eb4b8a;
   }
 

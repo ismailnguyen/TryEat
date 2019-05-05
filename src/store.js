@@ -49,12 +49,8 @@ export const store = new Vuex.Store({
             firebase.usersCollection
             .doc(state.currentUser.uid)
             .get()
-            .then(doc => {
-                commit('setUserProfile', doc.data())
-            })
-            .catch(res => {
-                console.log(err)
-            })
+            .then(doc => commit('setUserProfile', doc.data()))
+            .catch(console.log)
         },
 
         updateProfile({ commit, state}, data) {
@@ -63,9 +59,7 @@ export const store = new Vuex.Store({
             firebase.usersCollection
             .doc(state.currentUser.uid)
             .update({ name })
-            .catch(res => {
-                console.log(err)
-            })
+            .catch(console.log)
         }
     }, 
     mutations: {

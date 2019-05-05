@@ -1,6 +1,35 @@
 <template>
-    <div class="ui centered card">
-        <div class="content">
+    <div class="ui card">
+
+        <div class="content" v-show="editMode">
+            <form class="ui form">
+                <div class="field">
+                    <label>Name</label>
+                    <input placeholder="Name" type="text"v-model="restaurant.name" @change="save()">
+                </div>
+                <div class="field">
+                    <label>Location</label>
+                    <input placeholder="Location" type="text" v-model="restaurant.location" @change="save()">
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                    <textarea placeholder="Description" v-model="restaurant.description" @change="save()"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="extra content" v-show="editMode">
+            <span class="left floated" @click="remove">
+                <i class="trash icon"></i>
+                Delete
+            </span>
+
+            <span class="right floated" @click="edit">
+                <i class="x icon"></i>
+                Close
+            </span>
+        </div>
+
+        <div class="content" v-show="!editMode">
             <div class="header">
                 {{ restaurant.name }}
             </div>
@@ -9,20 +38,17 @@
                     {{restaurant.location}}
                 </a>
             </div>
-            <div class="description">
-                {{ restaurant.description }}
-            </div>
         </div>
-        <div class="extra content">
-            <span class="left floated like" @click="edit">
+        <div class="extra content" v-show="!editMode">
+            <a v-for="(tag, index) in restaurant.description.split(',')" class="ui label">
+                {{tag}}
+            </a>
+
+            <span class="right floated" @click="edit">
                 <i class="edit icon"></i>
-                Edit
-            </span>
-            <span class="right floated star" @click="remove">
-                <i class="x icon"></i>
-                Delete
             </span>
         </div>
+
     </div>
 </template>
 
@@ -45,14 +71,30 @@
                 firebase.restaurantsCollection
                 .doc(this.restaurant.id)
                 .delete()
-                .catch(error => {
-                    console.log(error)
-                })
+                .catch(console.log)
             },
 
             edit: function() {
                 this.editMode = !this.editMode
+            },
+
+            save: function () {
+                firebase.restaurantsCollection
+                .doc(this.restaurant.id)
+                .update(this.restaurant)
+                .catch(console.log)
             }
         }
     }
 </script>
+
+<style scoped>
+    .ui.form .field>label {
+        color: #000;
+    }
+
+    .ui.card {
+        margin-bottom: 25px !important; 
+        box-shadow: 8px 8px 0px #aaa;
+    }
+</style>

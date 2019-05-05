@@ -1,33 +1,45 @@
 <template>
-    <div class="text-center">
-        <transition name="fade">
-            <div v-if="performingRequest" class="loading">
-                <p>Loading...</p>
+    <div class="ui container">
+        
+        <div class="ui segment" v-if="performingRequest">
+            <div class="ui active dimmer">
+                <div class="ui loader"></div>
             </div>
-        </transition>
+        </div>
 
-        <form class="form-signin">
-            <img class="mb-4" src="static/img/icons/favicon_128.png" alt="" width="128" height="128">
+        <div v-if="!performingRequest">
 
-            <div v-if="!passwordResetSuccess">
-                <h1 class="h3 mb-3 font-weight-normal">Reset your password</h1>
+            <img class="ui centered bordered circular image" src="static/img/icons/favicon_128.png" alt="">
 
-                <p class="secondary-color">{{error.message}}</p>
+            <div class="ui form error" v-if="!passwordResetSuccess">
+                <h2 class="ui center aligned header">
+                    Reset your password
+                </h2>
 
-                <label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" aria-describedby="emailHelp" v-model="email" required autofocus>
+                <div class="field">
+                    <label for="inputEmail" class="sr-only">E-mail</label>
+                    <input type="email" id="inputEmail" placeholder="Email address" aria-describedby="emailHelp" v-model="email" required autofocus>
+                </div>
 
-                <span class="btn btn-lg btn-outline-primary btn-block" @click="resetPassword">Confirm</span>
+                <div class="ui error message" v-if="error.message.length">
+                    <div class="header">Action Forbidden</div>
+                    <p>{{error.message}}</p>
+                </div>
 
-                <p class="mt-5 mb-3 text-muted"><router-link to="/register">Don't have account ? Sign up</router-link></p>
+                <button class="ui fluid submit button" type="submit" @click="resetPassword()" :disabled="email == ''">Confirm</button>
             </div>
 
-            <div v-else>
-                <h1>Email Sent</h1>
-                <p>check your email for a link to reset your password</p>
+            <div class="ui form error" v-else>
+                <h2 class="ui center aligned header">
+                    Email Sent
+                </h2>
+
+                <p>Check your email for a link to reset your password</p>
                 <router-link to="/login">Back to login</router-link>
             </div>
-        </form>
+
+            <p class="mt-5 mb-3 text-muted"><router-link to="/register">Don't have account ? Sign up</router-link></p>
+        </div>
     </div>
 </template>
 
@@ -42,7 +54,8 @@
                 error: {
                     message: ''
                 },
-                passwordResetSuccess: false
+                passwordResetSuccess: false,
+                performingRequest: false
             }
         },
         methods: {
@@ -56,10 +69,10 @@
                     this.passwordResetSuccess = true
                     this.email = ''
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(error => {
+                    console.log(error)
                     this.performingRequest = false
-                    this.error = err
+                    this.error = error
                 })
             }
         }
@@ -67,51 +80,17 @@
 </script>
 
 <style scoped>
-    .form-control {
-        color: black;
+    .ui.header {
+        color: white;
+    }
+
+    .ui.segment {
+        padding-top: 450px;
+        background: none;
         border: none;
-        border-radius: 0.75rem;
-        background-color: #ced4da70;
     }
 
-    .form-control::placeholder {
-        color: #fff;
-        opacity: 1;
-    }
-
-    .form-signin {
-        width: 100%;
-        max-width: 330px;
-        padding: 15px;
-        margin: auto;
-    }
-
-    .form-signin .checkbox {
-        font-weight: 400;
-    }
-
-    .form-signin .form-control {
-        opacity: 0.9;
-        position: relative;
-        box-sizing: border-box;
-        height: auto;
-        padding: 10px;
-        font-size: 16px;
-    }
-
-    .form-signin .form-control:focus {
-        z-index: 2;
-    }
-
-    .form-signin input[type="email"] {
-        margin-bottom: -1px;
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    .form-signin input[type="password"] {
-        margin-bottom: 10px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
+    .ui.dimmer {
+        background: none;
     }
 </style>

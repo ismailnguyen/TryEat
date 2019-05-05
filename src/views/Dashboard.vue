@@ -1,6 +1,6 @@
 <template>
     <div class="ui container">
-        <Header :title="title" />
+        <Header />
 
         <div class="ui stackable cards" v-if="restaurants.length">
             <RestaurantItem v-for="(restaurant, index) in restaurants" v-bind:key="index" :restaurant="restaurant" />

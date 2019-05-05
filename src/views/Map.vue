@@ -1,15 +1,11 @@
 <template>
     <div class="ui">
-        <Header :title="title" />
-        
-
         <div id="map" class="map"></div>
     </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
-    import Header from '../components/Header.vue'
     import RestaurantItem from '../components/RestaurantItem.vue'
 
     import * as ol from 'ol';
@@ -32,7 +28,6 @@
             }
         },
         components: {
-            Header,
             RestaurantItem
         },
         computed: {
@@ -96,7 +91,9 @@
                     source: new Vector({
                         features: [
                             new Feature({
-                                geometry: new Point(transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'))
+                                geometry: new Point(
+                                        transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')
+                                    )
                             })
                         ]
                     }),

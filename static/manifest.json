@@ -1,6 +1,10 @@
 {
-  "name": "try-eat",
-  "short_name": "try-eat",
+  "name": "Try Eat",
+  "short_name": "TryEat",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#292e4f",
+  "theme_color": "#292e4f",
   "icons": [
     {
       "src": "/static/img/icons/favicon_256.png",
@@ -12,9 +16,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "start_url": "/index.html",
-  "display": "standalone",
-  "background_color": "#292e4f",
-  "theme_color": "#292e4f"
+  ]
 }

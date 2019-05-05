@@ -5,20 +5,14 @@
                 <i class="big cog icon"></i>
             </router-link>
 
-            <h1>{{title}}</h1>
-
+            <h1>Try <span class="primary-color">Eat</span></h1>
+            
             <router-link to="add-restaurant" class="right floated item" active-class="active">
                 <i class="big plus icon"></i>
             </router-link>
         </div>
     </header>
 </template>
-
-<script>
-    export default {
-        props: ['title']
-    }
-</script>
 
 <style scoped>
     .ui.header {
@@ -44,5 +38,9 @@
 
     .ui.menu .item.left {
         color: #acbfd9ab;
+    }
+
+    .primary-color {
+        color: #eb4b8a;
     }
 </style>

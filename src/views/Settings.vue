@@ -1,9 +1,11 @@
 <template>
     <div class="ui container">
         
-        <Header :title="title" />
+        <Header />
 
-        <p>My profile</p>
+        <h1>Settings</h1>
+
+        <h4>My profile</h4>
 
         <div class="ui success message" v-if="showSuccess">
             <i class="close icon"></i>
@@ -39,7 +41,6 @@
     export default {
         data () {
             return {
-                title: 'Settings',
                 name: '',
                 showSuccess: false
             }
@@ -72,9 +73,7 @@
                     this.$store.dispatch('clearData')
                     this.$router.push('/login')
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+                .catch(console.log)
             }
         }
     }

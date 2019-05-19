@@ -59,9 +59,12 @@
     .search-bar {
         position: fixed;
         top: 73px;
-        width: 80%;
+        width: 60%;
         z-index: 99;
         box-shadow: 8px 8px 0px #aaa;
+        margin: auto;
+        right: 0;
+        left: 0;
     }
     .restaurants-list, .no-content {
         text-align: center;

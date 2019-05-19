@@ -61,7 +61,9 @@
         },
         methods: {
             add: function () {
-                firebase.restaurantsCollection
+                firebase.usersCollection
+                .doc(this.currentUser.uid)
+                .collection('restaurants')
                 .add({
                     createdOn: new Date(),
                     name: this.restaurant.name,

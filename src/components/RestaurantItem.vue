@@ -64,11 +64,13 @@
             }
         },
         computed: {
-            ...mapState(['userProfile', 'restaurants'])
+            ...mapState(['currentUser', 'userProfile', 'restaurants'])
         },
         methods: {
             remove: function () {
-                firebase.restaurantsCollection
+                firebase.usersCollection
+                .doc(this.currentUser.uid)
+                .collection('restaurants')
                 .doc(this.restaurant.id)
                 .delete()
                 .catch(console.log)
@@ -79,7 +81,9 @@
             },
 
             save: function () {
-                firebase.restaurantsCollection
+                firebase.usersCollection
+                .doc(this.currentUser.uid)
+                .collection('restaurants')
                 .doc(this.restaurant.id)
                 .update(this.restaurant)
                 .catch(console.log)

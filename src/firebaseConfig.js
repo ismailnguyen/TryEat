@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 
 // firebase init goes here
@@ -22,12 +22,10 @@ const currentUser = auth.currentUser
 
 // firebase collections
 const usersCollection = db.collection('users')
-const restaurantsCollection = db.collection('restaurants')
 
 export {
     db,
     auth,
     currentUser,
-    usersCollection,
-    restaurantsCollection
+    usersCollection
 }

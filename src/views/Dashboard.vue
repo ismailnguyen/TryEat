@@ -1,13 +1,20 @@
 <template>
     <div class="ui container">
         <Header />
-
-        <div class="ui stackable cards" v-if="restaurants.length">
-            <RestaurantItem v-for="(restaurant, index) in restaurants" v-bind:key="index" :restaurant="restaurant" />
+        
+        <div class="ui top attached search-bar">
+            <div class="ui big fluid icon input">
+                <input type="text" placeholder="Search ..." v-model="searchQuery">
+                <i class="search icon"></i>
+            </div>
         </div>
 
-        <div class="container py-5" v-else>
-            <p>There are currently no restaurants</p>
+        <div class="ui stackable cards restaurants-list" v-if="filteredRestaurants.length">
+            <RestaurantItem v-for="(restaurant, index) in filteredRestaurants" v-bind:key="index" :restaurant="restaurant" />
+        </div>
+
+        <div class="container py-5 no-content" v-else>
+            <h2>No restaurants found</h2>
         </div>
     </div>
 </template>
@@ -20,7 +27,8 @@
     export default {
         data() {
             return {
-                title: 'Try Eat'
+                title: 'Try Eat',
+                searchQuery: ''
             }
         },
         components: {
@@ -28,7 +36,35 @@
             RestaurantItem
         },
         computed: {
-            ...mapState(['userProfile', 'restaurants'])
+            ...mapState(['userProfile', 'restaurants']),
+
+            filteredRestaurants: function () {
+                if (this.searchQuery == '') {
+                    return this.restaurants;
+                }
+
+                let query = this.searchQuery.toLowerCase();
+
+                return this.restaurants.filter(restaurant => {
+                    return restaurant.name.toLowerCase().includes(query)
+                            || restaurant.location.toLowerCase().includes(query)
+                            || restaurant.description.toLowerCase().includes(query);
+                });
+            }
         }
     }
 </script>
+
+<style scoped>
+    .search-bar {
+        position: fixed;
+        top: 73px;
+        width: 80%;
+        z-index: 99;
+        box-shadow: 8px 8px 0px #aaa;
+    }
+    .restaurants-list, .no-content {
+        text-align: center;
+        margin-top: 50px;
+    }
+</style>

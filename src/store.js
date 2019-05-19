@@ -10,7 +10,9 @@ firebase.auth.onAuthStateChanged(user => {
         store.commit('setCurrentUser', user)
         store.dispatch('fetchUserProfile')
 
-        firebase.restaurantsCollection
+        firebase.usersCollection
+        .doc(user.uid)
+        .collection('restaurants')
         .orderBy('name', 'asc')
         .onSnapshot(querySnapshot => {
             let restaurantsArray =  []

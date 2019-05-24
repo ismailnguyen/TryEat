@@ -4,7 +4,7 @@
         
         <div class="ui top attached search-bar">
             <div class="ui big fluid icon input">
-                <input type="text" placeholder="Search ..." v-model="searchQuery">
+                <input type="search" :value="searchQuery" @input="updateSearchQuery" placeholder="Search ..." autofocus>
                 <i class="search icon"></i>
             </div>
         </div>
@@ -34,6 +34,12 @@
         components: {
             Header,
             RestaurantItem
+        },
+        methods: {
+            updateSearchQuery: function (event)
+            {
+                this.searchQuery = event.target.value;
+            }
         },
         computed: {
             ...mapState(['userProfile', 'restaurants']),

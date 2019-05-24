@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="extra content" v-show="!editMode">
-            <a v-for="(tag, index) in restaurant.description.split(',')" class="ui label">
+            <a v-for="(tag, index) in restaurant.description.split(',')" :key="index" class="ui label">
                 {{tag}}
             </a>
 

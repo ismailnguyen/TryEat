@@ -1,6 +1,11 @@
 <template>
     <div class="ui">
         <div id="map" class="map"></div>
+        <div v-show="clikedRestaurantName != ''" class="details-popup">
+            <a :href="'https://www.google.com/maps/search/?api=1&query=' + clikedRestaurantName" target="_blank">
+                {{ clikedRestaurantName }}
+            </a>
+        </div>
     </div>
 </template>
 
@@ -10,21 +15,20 @@
 
     import * as ol from 'ol';
     import 'ol/ol.css';
-    import { Map, View, Feature } from 'ol';
-    import TileLayer from 'ol/layer/Tile';
-    import VectorLayer from 'ol/layer/Vector';
-    import OSM from 'ol/source/OSM';
-    import Vector from 'ol/source/Vector';
+    import { Map, View, Feature, Geolocation } from 'ol';
+    import { Tile, Vector as VectorLayer } from 'ol/layer';
+    import { OSM, Vector, Cluster } from 'ol/source';
     import Point from 'ol/geom/Point';
-    import Style from 'ol/style/Style';
-    import Icon from 'ol/style/Icon';
+    import { Circle, Fill, Stroke, Style, Text, Icon } from 'ol/style';
     import { fromLonLat, transform } from 'ol/proj';
 
     export default {
         data() {
             return {
                 title: 'Near you',
-                map: null
+                map: null,
+                geolocation: null,
+                clikedRestaurantName: ''
             }
         },
         components: {
@@ -45,13 +49,13 @@
                 this.map = new Map({
                     target: 'map',
                     layers: [
-                        new TileLayer({
+                        new Tile({
                             source: new OSM()
                         })
                     ],
                     view: new View({
                         center: fromLonLat([37.41, 8.82]),
-                        zoom: 4
+                        zoom: 2
                     })
                 });
             },
@@ -72,18 +76,49 @@
                 this.addMarker({ locationName: 'Me', latitude: position.coords.latitude, longitude: position.coords.longitude });
             },
 
-            addRestaurantsToMap: function () {
-                for(var i = 0; i < this.restaurants.length; i++) {
-                    let restaurant = this.restaurants[i]
-                    fetch(`https://nominatim.openstreetmap.org/search?&format=json&q=${ this.restaurants[i].location }`)
+            fetchRestaurantLocation: function (restaurant) {
+                fetch(`https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.location }`)
                     .then(response => response.json())
                     .then(json => {
                         if (json.length) {
-                            console.log(json[0])
-                            this.addMarker({ locationName: restaurant.name, longitude: json[0].lon, latitude: json[0].lat })
+                            var latitude = parseFloat(json[0].lat);  
+                            var longitude = parseFloat(json[0].lon);
+
+                            this.addMarker({ locationName: restaurant.name, longitude: longitude, latitude: latitude })
                         }
                     })
+            },
+
+            addRestaurantsToMap: function () {
+                for (var i = 0; i < this.restaurants.length; i++) {
+                    this.fetchRestaurantLocation(this.restaurants[i]);
                 }
+
+                 this.map.on('click', this.showRestaurantDetails);
+
+                 this.map.on('pointermove', this.onPointerMove);
+            },
+
+            onPointerMove: function (event) {
+                if (event.dragging) {
+                    this.hideRestaurantDetailPopup()
+                }
+            },
+
+            hideRestaurantDetailPopup: function () {
+                this.clikedRestaurantName = '';
+            },
+
+            showRestaurantDetails: function(event) {
+                var feature = this.map.forEachFeatureAtPixel(event.pixel,
+                    function(feature) {
+                        return feature;
+                    });
+                    if (feature) {
+                        var restaurantName = feature.get('name');
+
+                        this.clikedRestaurantName = restaurantName;
+                    }
             },
 
             addMarker: function ({ locationName, longitude, latitude }) {
@@ -91,6 +126,7 @@
                     source: new Vector({
                         features: [
                             new Feature({
+                                name: locationName,
                                 geometry: new Point(
                                         transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')
                                     )
@@ -98,11 +134,30 @@
                         ]
                     }),
                     style: new Style({
-                        image: new Icon(({
-                            anchor: [0.5, 1],
-                            src: `http://cdn.mapmarker.io/api/v1/pin?text=${ locationName }&size=50&hoffset=1`
-                        }))
+                        
+                        image: new Circle({
+                                    radius: 20,
+                                    fill: new Fill({
+                                        color: '#eb4b8a'
+                                    })
+                                }),
+                                text: new Text({
+                                    font: 'bold 17px "Miriam Libre","Helvetica Neue",Helvetica,Arial,sans-serif',
+                                    text: locationName,
+                                    fill: new Fill({
+                                        color: '#292e4f'
+                                    })
+                                })
+
+                                /*
+                                image: new Icon(({
+                                    anchor: [0.5, 1],
+                                    src: `http://cdn.mapmarker.io/api/v1/pin?text=${ locationName }&size=50&hoffset=1`
+                                }))
+                                */
                     })
+
+                    
                 }));
             }
         }
@@ -114,5 +169,22 @@
         width: 100%;
         height: 100%;
         position:fixed;
-      }
+    }
+
+    .details-popup {
+        z-index: 999;
+        position: absolute;
+        bottom: 50px;
+        background: #292e4f;
+        width: 100%;
+        height: 5%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .details-popup a {
+        color: #eb4b8a;
+        font-size: 2rem;
+        font-weight: 700;
+    }
 </style>

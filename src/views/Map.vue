@@ -73,7 +73,7 @@
 
                 this.map.getView().animate({ center: coords, zoom: 16 });
 
-                this.addMarker({ locationName: 'Me', latitude: position.coords.latitude, longitude: position.coords.longitude });
+                this.addPrimaryMarker({ locationName: 'Me', latitude: position.coords.latitude, longitude: position.coords.longitude });
             },
 
             fetchRestaurantLocation: function (restaurant) {
@@ -84,7 +84,7 @@
                             var latitude = parseFloat(json[0].lat);  
                             var longitude = parseFloat(json[0].lon);
 
-                            this.addMarker({ locationName: restaurant.name, longitude: longitude, latitude: latitude })
+                            this.addSecondaryMarker({ locationName: restaurant.name, longitude: longitude, latitude: latitude })
                         }
                     })
             },
@@ -121,7 +121,47 @@
                     }
             },
 
-            addMarker: function ({ locationName, longitude, latitude }) {
+            addPrimaryMarker: function ({ locationName, longitude, latitude }) {
+                const style = new Style({
+                    image: new Circle({
+                        radius: 20,
+                        fill: new Fill({
+                            color: '#292e4f'
+                        })
+                    }),
+                    text: new Text({
+                        font: 'bold 17px "Miriam Libre","Helvetica Neue",Helvetica,Arial,sans-serif',
+                        text: locationName,
+                        fill: new Fill({
+                            color: '#eb4b8a'
+                        })
+                    })
+                });
+
+                this.addMarker({ locationName: locationName, longitude: longitude, latitude: latitude, style: style });
+            },
+
+            addSecondaryMarker: function ({ locationName, longitude, latitude }) {
+                const style = new Style({
+                    image: new Circle({
+                        radius: 20,
+                        fill: new Fill({
+                            color: '#eb4b8a'
+                        })
+                    }),
+                    text: new Text({
+                        font: 'bold 17px "Miriam Libre","Helvetica Neue",Helvetica,Arial,sans-serif',
+                        text: locationName,
+                        fill: new Fill({
+                            color: '#292e4f'
+                        })
+                    })
+                });
+
+                this.addMarker({ locationName: locationName, longitude: longitude, latitude: latitude, style: style });
+            },
+
+            addMarker: function ({ locationName, longitude, latitude, style }) {
                 this.map.addLayer(new VectorLayer({
                     source: new Vector({
                         features: [
@@ -133,31 +173,7 @@
                             })
                         ]
                     }),
-                    style: new Style({
-                        
-                        image: new Circle({
-                                    radius: 20,
-                                    fill: new Fill({
-                                        color: '#eb4b8a'
-                                    })
-                                }),
-                                text: new Text({
-                                    font: 'bold 17px "Miriam Libre","Helvetica Neue",Helvetica,Arial,sans-serif',
-                                    text: locationName,
-                                    fill: new Fill({
-                                        color: '#292e4f'
-                                    })
-                                })
-
-                                /*
-                                image: new Icon(({
-                                    anchor: [0.5, 1],
-                                    src: `http://cdn.mapmarker.io/api/v1/pin?text=${ locationName }&size=50&hoffset=1`
-                                }))
-                                */
-                    })
-
-                    
+                    style: style
                 }));
             }
         }

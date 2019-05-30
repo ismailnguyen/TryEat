@@ -8,6 +8,10 @@ Live : [https://tryeat.me](https://tryeat.me)
 
 ## Screenshots
 
+### Login page
+
+![](https://github.com/ismailnguyen/TryEat/raw/master/screenshots/login.png)
+
 ### Home page
 
 ![](https://github.com/ismailnguyen/TryEat/raw/master/screenshots/home.png)

@@ -4,7 +4,7 @@
 
 Live : [https://tryeat.me](https://tryeat.me)
 
-`Progressive Web App` `Vue JS` `Firebase`
+`Progressive Web App` `Vue JS` `Semantic UI` `Firebase`
 
 ## Screenshots
 

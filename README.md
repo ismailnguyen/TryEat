@@ -1,6 +1,21 @@
-# try-eat
+# Try Eat
 
-> Try Eat
+> Application to store list of restaurants to try with a map in which you can see your favorites restaurants near your geo location
+
+Demo: [https://tryeat.me/](https://tryeat.me/)
+
+`Progressive Web App` `Vue JS` `Firebase`
+
+## Screenshots
+
+### Home page
+
+![](https://github.com/ismailnguyen/TryEat/raw/master/screenshots/home.png)
+
+### Map
+
+![](https://github.com/ismailnguyen/TryEat/raw/master/screenshots/map.png)
+
 
 ## Build Setup
 

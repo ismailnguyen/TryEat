@@ -2,7 +2,7 @@
 
 > Application to store list of restaurants to try with a map in which you can see your favorites restaurants near your geo location
 
-Demo: [https://tryeat.me/](https://tryeat.me/)
+Live : [https://tryeat.me](https://tryeat.me)
 
 `Progressive Web App` `Vue JS` `Firebase`
 

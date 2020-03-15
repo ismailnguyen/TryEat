@@ -25,8 +25,10 @@
   }
   
   body {
-    background: #292e4f;
     color: #ffffff;
+    background: #42275a;
+    background: -webkit-linear-gradient(to right, #734b6d, #42275a);
+    background: linear-gradient(to right, #734b6d, #42275a);
   }
 
   .primary-color {

@@ -23,8 +23,10 @@
         top: 0;
         right: 0;
         left: 0;
-        background: #292e4fa1;
         z-index: 999;
+        background: #42275a;
+        background: -webkit-linear-gradient(to right, #734b6d, #42275a);
+        background: linear-gradient(to right, #734b6da1, #42275aa1);
     }
 
     .ui.segment, .ui.menu {

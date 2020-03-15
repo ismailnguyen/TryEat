@@ -11,27 +11,20 @@
                 <input type="text" id="inputName" placeholder="Name" aria-describedby="nameHelp" v-model="restaurant.name" required>
             </div>
 
-            <div v-if="showMoreFields">
-                <div class="field">
-                    <label for="inputLocation" class="sr-only">Location</label>
-                    <input type="text" id="inputLocation" placeholder="Location" aria-describedby="locationHelp" v-model="restaurant.location">
-                </div>
-
-                <div class="field">
-                    <label for="inputDescription" class="sr-only">Description</label>
-                    <textarea id="inputDescription" placeholder="Description" aria-describedby="descriptionHelp" v-model="restaurant.description"></textarea>
-                </div>
+            <div class="field">
+                <label for="inputLocation" class="sr-only">Location <small><i>(optional)</i></small></label>
+                <input type="text" id="inputLocation" placeholder="eg. 15 rue Jean Jaures, 75015 Paris" aria-describedby="locationHelp" v-model="restaurant.location">
             </div>
 
-            <div class="inline field" v-if="!showMoreFields">
-                <div class="ui toggle checkbox" @click="showMoreFields = !showMoreFields">
-                    <input type="checkbox" tabindex="0" class="hidden">
-                    <label>More fields</label>
-                </div>
+            <div class="field">
+                <label for="inputDescription" class="sr-only">Tags <small><i>(optional)</i></small></label>
+                <textarea id="inputDescription" placeholder="Separated with comma" aria-describedby="descriptionHelp" v-model="restaurant.description"></textarea>
             </div>
 
-            <button class="ui inverted basic button" type="submit" @click="cancel()">Cancel</button>
-            <button class="ui submit button" type="submit" @click="add()" :disabled="restaurant.name == ''">Add</button>
+            <div class="field">
+                <button class="ui inverted basic button" type="submit" @click="cancel()">Cancel</button>
+                <button class="ui submit button" type="submit" @click="add()" :disabled="restaurant.name == ''">Add</button>
+            </div>
 
         </div>
     </div>
@@ -49,8 +42,7 @@
                     name: '',
                     description: '',
                     location: '',
-                },
-                showMoreFields: false
+                }
             }
         },
         components: {
@@ -75,6 +67,8 @@
                     this.restaurant.name = ''
                     this.restaurant.description = ''
                     this.restaurant.location = ''
+
+                    this.$router.push('/');
                 })
                 .catch(console.log)
             },

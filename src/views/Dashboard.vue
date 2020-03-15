@@ -41,6 +41,15 @@
                 this.searchQuery = event.target.value;
             }
         },
+        mounted() {
+            $(window).scroll(function() {
+                var scroll = $(window).scrollTop();
+
+                $(".search-bar").css({
+                    "top": scroll ? '7px' : '73px'
+                });
+            });
+        },
         computed: {
             ...mapState(['userProfile', 'restaurants']),
 
@@ -66,14 +75,20 @@
         position: fixed;
         top: 73px;
         width: 60%;
-        z-index: 99;
+        z-index: 9999;
         box-shadow: 8px 8px 0px #aaa;
         margin: auto;
         right: 0;
         left: 0;
+        transition: all .5s;
     }
+
+    .search-bar input {
+        box-shadow: 8px 8px 0px #aaa;
+    }
+
     .restaurants-list, .no-content {
         text-align: center;
-        margin-top: 50px;
+        margin-top: 85px;
     }
 </style>

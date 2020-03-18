@@ -39,21 +39,6 @@
     color: #eb4b8a;
   }
 
-  .ui.menu {
-    background: #292e4fa1;
-    color: #ffffff;
-  }
-
-  .ui.menu .item {
-    color: #ffffff;
-  }
-  
-  .ui.menu .active.item,
-  .ui.menu .active.item:hover {
-    background: #292e4fe6;
-    color: #eb4b8a;
-  }
-
   .ui.container {
     padding-top: 100px;
     padding-bottom: 100px;

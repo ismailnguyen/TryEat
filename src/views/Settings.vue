@@ -82,7 +82,7 @@
 <style scoped>
     .signout-button {
         position: fixed;
-        bottom: 70px;
+        bottom: 100px;
         width: 90%;
         margin: auto;
         right: 0;

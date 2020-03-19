@@ -23,9 +23,9 @@
 
                 var isScrollDown = st > lastScrollTop;
 
-                // $('footer').css({
-                //     'display': isScrollDown ? 'none': 'block'
-                // });
+                $('footer').css({
+                    'display': isScrollDown ? 'none': 'block'
+                });
 
                 lastScrollTop = st;
             });
@@ -41,25 +41,27 @@
         bottom: 20px;
         z-index: 1030;
         backdrop-filter: blur(10px);
-    }
-
-    footer .menu .right-item {
-        border-bottom-right-radius: 50px;
-        border-bottom-right-radius: 50px;
-    }
-
-    footer .menu .left-item {
-        border-bottom-left-radius: 50px;
-        border-bottom-left-radius: 50px;
+        border-radius: 50px !important;
     }
     
     .ui.menu {
         background: #292e4fa1;
         color: #ffffff;
+        border-radius: 50px !important;
     }
 
     .ui.menu .item {
         color: #ffffff;
+    }
+
+    .ui.menu .right-item {
+        border-top-right-radius: 50px !important;
+        border-bottom-right-radius: 50px !important;
+    }
+
+    .ui.menu .left-item {
+        border-top-left-radius: 50px !important;
+        border-bottom-left-radius: 50px !important;
     }
     
     .ui.menu .active.item,

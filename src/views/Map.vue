@@ -18,7 +18,7 @@
 <script>
     import { mapState } from 'vuex'
     import RestaurantItem from '../components/RestaurantItem.vue'
-
+    import { debounce } from 'debounce';
     import * as ol from 'ol';
     import 'ol/ol.css';
     import { Map, View, Feature, Geolocation } from 'ol';
@@ -90,9 +90,15 @@
                 fetch(
                     `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.location }`, 
                     {
+                        mode: 'no-cors',
                         cache: 'force-cache',
                         referrer: window.location.origin,
-                        referrerPolicy: 'origin-when-cross-origin'
+                        referrerPolicy: 'origin-when-cross-origin',
+                        headers: new Headers({
+                            "Accept"       : "application/json",
+                            "Content-Type" : "application/json",
+                            "User-Agent"   : "Tryeat.me v.2.0.0 contact nguyen.ismail@gmail.com"
+                        }),
                     }
                     )
                     .then(response => response.json())
@@ -108,7 +114,7 @@
 
             addRestaurantsToMap: function () {
                 for (var i = 0; i < this.restaurants.length; i++) {
-                    this.fetchRestaurantLocation(this.restaurants[i]);
+                    debounce(this.fetchRestaurantLocation(this.restaurants[i]), 1000)
                 }
 
                  this.map.on('click', this.showRestaurantDetails);
@@ -214,7 +220,7 @@
     .map {
         width: 100%;
         height: 100%;
-        position:fixed;
+        position: fixed;
     }
 
     .details-popup {

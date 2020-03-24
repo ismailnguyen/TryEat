@@ -1,11 +1,11 @@
 <template>
     <footer>
         <div class="ui two item menu">
-            <router-link class="item left-item" to="dashboard" active-class="active">
+            <router-link class="item" to="dashboard" active-class="active">
                 <i class="big bookmark icon" v-if="this.$route.name === 'Dashboard'"></i>
                 <i class="big bookmark outline icon" v-else></i>
             </router-link>
-            <router-link class="item right-item" to="map" active-class="active">
+            <router-link class="item" to="map" active-class="active">
                 <i class="big map icon" v-if="this.$route.name === 'Map'"></i>
                 <i class="big map outline icon" v-else></i>
             </router-link>
@@ -41,32 +41,26 @@
         bottom: 20px;
         z-index: 1030;
         backdrop-filter: blur(10px);
-        border-radius: 50px !important;
+        width: 42.5vh;
+        margin: auto;
     }
     
     .ui.menu {
         background: #292e4fa1;
         color: #ffffff;
-        border-radius: 50px !important;
+        border-radius: 10px;
+        border: none;
     }
 
     .ui.menu .item {
         color: #ffffff;
-    }
-
-    .ui.menu .right-item {
-        border-top-right-radius: 50px !important;
-        border-bottom-right-radius: 50px !important;
-    }
-
-    .ui.menu .left-item {
-        border-top-left-radius: 50px !important;
-        border-bottom-left-radius: 50px !important;
     }
     
     .ui.menu .active.item,
     .ui.menu .active.item:hover {
         background: #292e4fcf;
         color: #eb4b8a;
+        margin: 10px;
+        border-radius: 10px;
     }
 </style>

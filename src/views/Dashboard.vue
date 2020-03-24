@@ -9,8 +9,12 @@
             </div>
         </div>
 
-        <div class="ui stackable cards restaurants-list" v-if="filteredRestaurants.length">
-            <RestaurantItem v-for="(restaurant, index) in filteredRestaurants" v-bind:key="index" :restaurant="restaurant" />
+        <div class="ui grid" v-if="filteredRestaurants.length">
+            <div class="sixteen wide column">
+                <div class="ui three stackable cards restaurants-list">
+                    <RestaurantItem v-for="(restaurant, index) in filteredRestaurants" v-bind:key="index" :restaurant="restaurant" />
+                </div>
+            </div>
         </div>
 
         <div class="container py-5 no-content" v-else>
@@ -46,7 +50,7 @@
                 var scroll = $(window).scrollTop();
 
                 $(".search-bar").css({
-                    "top": scroll ? '7px' : '73px'
+                    "top": scroll ? '12px' : '73px'
                 });
             });
         },
@@ -76,15 +80,17 @@
         top: 73px;
         width: 60%;
         z-index: 9999;
-        box-shadow: 8px 8px 0px #aaa;
         margin: auto;
         right: 0;
         left: 0;
         transition: all .5s;
+        backdrop-filter: blur(10px);
     }
 
-    .search-bar input {
-        box-shadow: 8px 8px 0px #aaa;
+    .search-bar input,
+    .search-bar input:active,
+    .search-bar input:focus {
+        background: rgba(41, 46, 79, 0.63);
     }
 
     .restaurants-list, .no-content {

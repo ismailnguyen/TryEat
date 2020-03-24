@@ -41,8 +41,15 @@
         bottom: 20px;
         z-index: 1030;
         backdrop-filter: blur(10px);
-        width: 42.5vh;
+        width: 76%;
+        border-radius: 10px;
         margin: auto;
+    }
+
+    @media(min-width:768px) {
+        footer {
+            width: 25%;
+        }
     }
     
     .ui.menu {

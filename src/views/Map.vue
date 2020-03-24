@@ -1,9 +1,15 @@
 <template>
     <div class="ui">
         <div id="map" class="map"></div>
-        <div v-show="clikedRestaurantName != ''" class="details-popup">
-            <a :href="'https://www.google.com/maps/search/?api=1&query=' + clikedRestaurantName" target="_blank">
-                {{ clikedRestaurantName }}
+        <div v-show="selectedRestaurant.name != ''" class="details-popup">
+            <a :href="selectedRestaurantMapUrl()" target="_blank" class="title">
+                {{ selectedRestaurant.name }}
+            </a>
+            <br>
+            {{ selectedRestaurant.location }}
+            <br><br>
+            <a v-for="(tag, index) in selectedRestaurant.description.split(',')" :key="index" class="ui label">
+                {{tag}}
             </a>
         </div>
     </div>
@@ -28,7 +34,11 @@
                 title: 'Near you',
                 map: null,
                 geolocation: null,
-                clikedRestaurantName: ''
+                selectedRestaurant: {
+                    name: '',
+                    location: '',
+                    description: ''
+                }
             }
         },
         components: {
@@ -77,14 +87,21 @@
             },
 
             fetchRestaurantLocation: function (restaurant) {
-                fetch(`https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.location }`)
+                fetch(
+                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.location }`, 
+                    {
+                        cache: 'force-cache',
+                        referrer: window.location.origin,
+                        referrerPolicy: 'origin-when-cross-origin'
+                    }
+                    )
                     .then(response => response.json())
                     .then(json => {
                         if (json.length) {
                             var latitude = parseFloat(json[0].lat);  
                             var longitude = parseFloat(json[0].lon);
 
-                            this.addSecondaryMarker({ locationName: restaurant.name, longitude: longitude, latitude: latitude })
+                            this.addSecondaryMarker({ locationId: restaurant.id, locationName: restaurant.name, longitude: longitude, latitude: latitude })
                         }
                     })
             },
@@ -106,7 +123,7 @@
             },
 
             hideRestaurantDetailPopup: function () {
-                this.clikedRestaurantName = '';
+                this.selectedRestaurant.name = '';
             },
 
             showRestaurantDetails: function(event) {
@@ -115,9 +132,12 @@
                         return feature;
                     });
                     if (feature) {
-                        var restaurantName = feature.get('name');
+                        var restaurantId = feature.get('id');
 
-                        this.clikedRestaurantName = restaurantName;
+                        if (restaurantId === 0)
+                            return;
+                        
+                        this.selectedRestaurant = this.restaurants.find(restaurant => restaurant.id === restaurantId);
                     }
             },
 
@@ -138,10 +158,10 @@
                     })
                 });
 
-                this.addMarker({ locationName: locationName, longitude: longitude, latitude: latitude, style: style });
+                this.addMarker({ locationId: 0, locationName: locationName, longitude: longitude, latitude: latitude, style: style });
             },
 
-            addSecondaryMarker: function ({ locationName, longitude, latitude }) {
+            addSecondaryMarker: function ({ locationId, locationName, longitude, latitude }) {
                 const style = new Style({
                     image: new Circle({
                         radius: 20,
@@ -158,14 +178,15 @@
                     })
                 });
 
-                this.addMarker({ locationName: locationName, longitude: longitude, latitude: latitude, style: style });
+                this.addMarker({ locationId: locationId, locationName: locationName, longitude: longitude, latitude: latitude, style: style });
             },
 
-            addMarker: function ({ locationName, longitude, latitude, style }) {
+            addMarker: function ({ locationId, locationName, longitude, latitude, style }) {
                 this.map.addLayer(new VectorLayer({
                     source: new Vector({
                         features: [
                             new Feature({
+                                id: locationId,
                                 name: locationName,
                                 geometry: new Point(
                                         transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')
@@ -175,6 +196,15 @@
                     }),
                     style: style
                 }));
+            },
+
+            selectedRestaurantMapUrl: function () {
+                let query = this.selectedRestaurant.name;
+
+                if (this.selectedRestaurant.location)
+                    query = `${query} ${this.selectedRestaurant.location}`
+
+                return `https://www.google.com/maps/search/?api=1&query=${query}`;
             }
         }
     }
@@ -190,15 +220,14 @@
     .details-popup {
         z-index: 999;
         position: absolute;
-        bottom: 50px;
+        bottom: 145px;
         background: #292e4f;
         width: 100%;
-        height: 5%;
         padding: 10px;
         text-align: center;
     }
 
-    .details-popup a {
+    .details-popup .title {
         color: #eb4b8a;
         font-size: 2rem;
         font-weight: 700;

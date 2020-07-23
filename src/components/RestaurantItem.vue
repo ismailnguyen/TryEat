@@ -4,16 +4,16 @@
         <div class="content" v-show="editMode">
             <form class="ui form">
                 <div class="field">
-                    <label>Name</label>
-                    <input placeholder="Name" type="text"v-model="restaurant.name" @change="save()">
+                    <label class="left floated">Name</label>
+                    <input placeholder="Name" type="text" v-model="restaurant.name" @change="update()">
                 </div>
                 <div class="field">
-                    <label>Location</label>
-                    <input placeholder="Location" type="text" v-model="restaurant.location" @change="save()">
+                    <label class="left floated">Location</label>
+                    <input placeholder="Location" type="text" v-model="restaurant.address" @change="update()">
                 </div>
                 <div class="field">
-                    <label>Description</label>
-                    <textarea placeholder="Description" v-model="restaurant.description" @change="save()"></textarea>
+                    <label class="left floated">Tags</label>
+                    <textarea placeholder="Description" v-model="restaurant.tags" @change="update()"></textarea>
                 </div>
             </form>
         </div>
@@ -34,13 +34,13 @@
                 {{ restaurant.name }}
             </div>
             <div class="meta">
-                <a :href="'https://www.google.com/maps/search/?api=1&query=' + restaurant.location" target="_blank">
-                    {{restaurant.location}}
+                <a :href="'https://www.google.com/maps/search/?api=1&query=' + restaurant.name + ' ' + restaurant.address" target="_blank">
+                    {{restaurant.address}}
                 </a>
             </div>
         </div>
         <div class="extra content" v-show="!editMode">
-            <a v-for="(tag, index) in restaurant.description.split(',')" :key="index" class="ui label">
+            <a v-for="(tag, index) in restaurant.tags.split(',')" :key="index" class="ui label">
                 {{tag}}
             </a>
 
@@ -74,12 +74,43 @@
                 .doc(this.restaurant.id)
                 .delete()
                 .catch(console.log)
+
+                this.editMode = false;
             },
 
             edit: function() {
                 this.editMode = !this.editMode
             },
 
+            update: function () {
+                fetch(
+                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ this.restaurant.location }`, 
+                    {
+                        mode: 'no-cors',
+                        cache: 'force-cache',
+                        referrer: window.location.origin,
+                        referrerPolicy: 'origin-when-cross-origin',
+                        headers: new Headers({
+                            "Accept"       : "application/json",
+                            "Content-Type" : "application/json",
+                            "User-Agent"   : "Bon.app v.1.0.0 contact admin@bon.app"
+                        }),
+                    }
+                    )
+                    .then(response => response.json())
+                    .then(json => {
+                        if (json.length) {
+                            console.log(json[0]);
+                            var latitude = parseFloat(json[0].lat);  
+                            var longitude = parseFloat(json[0].lon);
+                            
+                            this.restaurant.latitude = latitude;
+                            this.restaurant.longitude = longitude;
+                        }
+                    })
+                    .finally(this.save())
+            },
+         
             save: function () {
                 firebase.usersCollection
                 .doc(this.currentUser.uid)
@@ -100,5 +131,9 @@
     .ui.card {
         margin-bottom: 25px !important; 
         box-shadow: 8px 8px 0px #aaa;
+    }
+
+    .extra.content span {
+        cursor: pointer;
     }
 </style>

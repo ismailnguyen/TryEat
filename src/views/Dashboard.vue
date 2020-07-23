@@ -2,7 +2,7 @@
     <div class="ui container">
         <Header />
         
-        <div class="ui top attached search-bar">
+        <div class="ui top attached search-bar" v-if="restaurants.length">
             <div class="ui big fluid icon input">
                 <input type="search" :value="searchQuery" @input="updateSearchQuery" placeholder="Search ..." autofocus>
                 <i class="search icon"></i>
@@ -18,7 +18,8 @@
         </div>
 
         <div class="container py-5 no-content" v-else>
-            <h2>No restaurants found</h2>
+            <h2>No restaurant found</h2>
+            <h3>Click on + button on top right corner to add a restaurant !</h3>
         </div>
     </div>
 </template>
@@ -66,8 +67,8 @@
 
                 return this.restaurants.filter(restaurant => {
                     return restaurant.name.toLowerCase().includes(query)
-                            || restaurant.location.toLowerCase().includes(query)
-                            || restaurant.description.toLowerCase().includes(query);
+                            || restaurant.address.toLowerCase().includes(query)
+                            || restaurant.tags.toLowerCase().includes(query);
                 });
             }
         }

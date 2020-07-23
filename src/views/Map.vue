@@ -114,15 +114,19 @@
 
             addRestaurantsToMap: function () {
                 for (var i = 0; i < this.restaurants.length; i++) {
+
                     //debounce(() => {
+                    // if coordinates are not present, find coordinates using address
+                    if (this.restaurants[i].latitude == null || this.restaurants[i].longitude == null) {
+                        this.fetchRestaurantLocation(this.restaurants[i]);
+                    }
+                    else {
                         var latitude = parseFloat(this.restaurants[i].latitude);  
                         var longitude = parseFloat(this.restaurants[i].longitude);
-                        console.log(latitude, longitude)
-                        console.log(this.restaurants[i])
-                        this.addSecondaryMarker({ locationId: this.restaurants[i].id, locationName: this.restaurants[i].name, longitude: longitude, latitude: latitude })
 
-                        //this.fetchRestaurantLocation(this.restaurants[i]), 1000)
-                    //})
+                        this.addSecondaryMarker({ locationId: this.restaurants[i].id, locationName: this.restaurants[i].name, longitude: longitude, latitude: latitude })
+                    }
+                    //}, 1000);
                 }
 
                  this.map.on('click', this.showRestaurantDetails);

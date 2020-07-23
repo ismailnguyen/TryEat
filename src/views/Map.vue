@@ -1,22 +1,37 @@
 <template>
     <div class="ui">
         <div id="map" class="map"></div>
-        <div v-show="selectedRestaurant.name != ''" class="details-popup">
-            <a :href="selectedRestaurantMapUrl()" target="_blank" class="title">
-                {{ selectedRestaurant.name }}
-            </a>
-            <br>
-            {{ selectedRestaurant.address }}
-            <br><br>
-            <a v-for="(tag, index) in selectedRestaurant.tags.split(',')" :key="index" class="ui label">
-                {{tag}}
-            </a>
+            <div v-show="selectedRestaurant.name != ''" class="details-popup">
+                <div class="ui grid" >
+                <div class="sixteen wide column">
+                    <div class="ui one stackable cards restaurants-list">
+                        <div class="ui card">
+                            <div class="content">
+                                <div class="header details-popup--title">
+                                    {{ selectedRestaurant.name }}
+                                </div>
+                                <div class="meta details-popup--content">
+                                    <a :href="selectedRestaurantMapUrl()" target="_blank">
+                                        {{selectedRestaurant.address}}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="extra content" v-if="selectedRestaurant.tags">
+                                <a v-for="(tag, index) in selectedRestaurant.tags.split(',')" :key="index" class="ui label">
+                                    {{tag}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
+    import { store } from '../store.js'
     import RestaurantItem from '../components/RestaurantItem.vue'
     import { debounce } from 'debounce';
     import * as ol from 'ol';
@@ -45,14 +60,25 @@
             RestaurantItem
         },
         computed: {
-            ...mapState(['userProfile', 'restaurants'])
+            ...mapState(['userProfile', 'restaurants']),
+
+            restaurantCount () {
+                return store.getters.restaurantCount
+            }
+        },
+        watch: {
+            restaurantCount (newCount, oldCount) {
+                this.addRestaurantsToMap()
+            }
         },
         mounted() {
             this.initMap()
 
             this.setCurrentPosition()
 
-            this.addRestaurantsToMap()
+            if (this.restaurantCount) {
+                this.addRestaurantsToMap()
+            }
         },
         methods: {
             initMap: function () {
@@ -87,20 +113,7 @@
             },
 
             fetchRestaurantLocation: function (restaurant) {
-                fetch(
-                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.address }`, 
-                    {
-                        mode: 'no-cors',
-                        cache: 'force-cache',
-                        referrer: window.location.origin,
-                        referrerPolicy: 'origin-when-cross-origin',
-                        headers: new Headers({
-                            "Accept"       : "application/json",
-                            "Content-Type" : "application/json",
-                            "User-Agent"   : "Tryeat.me v.2.0.0 contact nguyen.ismail@gmail.com"
-                        }),
-                    }
-                    )
+                fetch(`https://us1.locationiq.com/v1/search.php?key=44d2248fc64943&format=json&q=${ restaurant.address }`)
                     .then(response => response.json())
                     .then(json => {
                         if (json.length) {
@@ -114,11 +127,9 @@
 
             addRestaurantsToMap: function () {
                 for (var i = 0; i < this.restaurants.length; i++) {
-
-                    //debounce(() => {
                     // if coordinates are not present, find coordinates using address
                     if (this.restaurants[i].latitude == null || this.restaurants[i].longitude == null) {
-                        this.fetchRestaurantLocation(this.restaurants[i]);
+                        setTimeout(this.fetchRestaurantLocation(this.restaurants[i]), 2000);
                     }
                     else {
                         var latitude = parseFloat(this.restaurants[i].latitude);  
@@ -126,7 +137,6 @@
 
                         this.addSecondaryMarker({ locationId: this.restaurants[i].id, locationName: this.restaurants[i].name, longitude: longitude, latitude: latitude })
                     }
-                    //}, 1000);
                 }
 
                  this.map.on('click', this.showRestaurantDetails);
@@ -239,15 +249,23 @@
         z-index: 999;
         position: absolute;
         bottom: 145px;
-        background: #292e4f;
         width: 100%;
         padding: 10px;
         text-align: center;
     }
 
-    .details-popup .title {
-        color: #eb4b8a;
+    .details-popup--title {
+        color: #eb4b8a !important;
         font-size: 2rem;
         font-weight: 700;
+    }
+
+    .details-popup--content > * {
+        color: #fff !important;
+    }
+
+    .details-popup .ui.card {
+        background: #292e4fa1;
+        backdrop-filter: blur(8px);
     }
 </style>

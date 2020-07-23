@@ -83,7 +83,7 @@
     .signout-button {
         position: fixed;
         bottom: 100px;
-        width: 90%;
+        width: 50%;
         margin: auto;
         right: 0;
         left: 0;

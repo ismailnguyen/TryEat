@@ -1,10 +1,10 @@
 <template>
-    <div class="ui card">
+    <div class="ui card restaurant-item">
 
         <div class="content" v-show="editMode">
             <form class="ui form">
                 <div class="field">
-                    <label class="left floated">Name</label>
+                    <label class="left floated">Name {{restaurant.latitude}}</label>
                     <input placeholder="Name" type="text" v-model="restaurant.name" @change="update()">
                 </div>
                 <div class="field">
@@ -73,7 +73,7 @@
                 .collection('restaurants')
                 .doc(this.restaurant.id)
                 .delete()
-                .catch(console.log)
+                .catch(console.error)
 
                 this.editMode = false;
             },
@@ -83,31 +83,15 @@
             },
 
             update: function () {
-                fetch(
-                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ this.restaurant.location }`, 
-                    {
-                        mode: 'no-cors',
-                        cache: 'force-cache',
-                        referrer: window.location.origin,
-                        referrerPolicy: 'origin-when-cross-origin',
-                        headers: new Headers({
-                            "Accept"       : "application/json",
-                            "Content-Type" : "application/json",
-                            "User-Agent"   : "Bon.app v.1.0.0 contact admin@bon.app"
-                        }),
-                    }
-                    )
+                fetch(`https://us1.locationiq.com/v1/search.php?key=44d2248fc64943&format=json&q=${ this.restaurant.address }`)
                     .then(response => response.json())
                     .then(json => {
                         if (json.length) {
-                            console.log(json[0]);
-                            var latitude = parseFloat(json[0].lat);  
-                            var longitude = parseFloat(json[0].lon);
-                            
-                            this.restaurant.latitude = latitude;
-                            this.restaurant.longitude = longitude;
+                            this.restaurant.latitude = parseFloat(json[0].lat);
+                            this.restaurant.longitude = parseFloat(json[0].lon);
                         }
                     })
+                    .catch(console.error)
                     .finally(this.save())
             },
          
@@ -117,13 +101,17 @@
                 .collection('restaurants')
                 .doc(this.restaurant.id)
                 .update(this.restaurant)
-                .catch(console.log)
+                .catch(console.error)
             }
         }
     }
 </script>
 
 <style scoped>
+    .restaurant-item {
+        margin: auto;
+    }
+    
     .ui.form .field>label {
         color: #000;
     }

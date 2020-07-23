@@ -24,7 +24,7 @@
                 var isScrollDown = st > lastScrollTop;
 
                 $('footer').css({
-                    'display': isScrollDown ? 'none': 'block'
+                    "bottom": isScrollDown ? '-80px' : '20px'
                 });
 
                 lastScrollTop = st;
@@ -44,6 +44,7 @@
         width: 76%;
         border-radius: 10px;
         margin: auto;
+        transition: all .5s;
     }
 
     @media(min-width:768px) {

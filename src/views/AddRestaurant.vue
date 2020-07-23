@@ -75,20 +75,7 @@
             add: function () {
                 this.savingInProgress = true;
 
-                fetch(
-                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ this.restaurant.location }`, 
-                    {
-                        mode: 'no-cors',
-                        cache: 'force-cache',
-                        referrer: window.location.origin,
-                        referrerPolicy: 'origin-when-cross-origin',
-                        headers: new Headers({
-                            "Accept"       : "application/json",
-                            "Content-Type" : "application/json",
-                            "User-Agent"   : "Tryeat.me v.2.0.0 contact nguyen.ismail@gmail.com"
-                        }),
-                    }
-                    )
+                fetch(`https://us1.locationiq.com/v1/search.php?key=44d2248fc64943&format=json&q=${ this.restaurant.address }`)
                     .then(response => response.json())
                     .then(json => {
                         if (json.length) {
@@ -127,7 +114,7 @@
 
                         this.$router.push('/');
                     })
-                    .catch(console.log)
+                    .catch(console.error)
             },
 
             cancel: function () {

@@ -40,6 +40,11 @@ export const store = new Vuex.Store({
         userProfile: {},
         restaurants: []
     },
+    getters: {
+        restaurantCount (state) {
+            return state.restaurants.length
+        }
+    },
     actions: {
         clearData ({ commit }) {
             commit('setCurrentUser', null)
@@ -52,7 +57,7 @@ export const store = new Vuex.Store({
             .doc(state.currentUser.uid)
             .get()
             .then(doc => commit('setUserProfile', doc.data()))
-            .catch(console.log)
+            .catch(console.error)
         },
 
         updateProfile({ commit, state}, data) {
@@ -61,7 +66,7 @@ export const store = new Vuex.Store({
             firebase.usersCollection
             .doc(state.currentUser.uid)
             .update({ name })
-            .catch(console.log)
+            .catch(console.error)
         }
     }, 
     mutations: {

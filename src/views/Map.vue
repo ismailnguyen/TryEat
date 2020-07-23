@@ -6,9 +6,9 @@
                 {{ selectedRestaurant.name }}
             </a>
             <br>
-            {{ selectedRestaurant.location }}
+            {{ selectedRestaurant.address }}
             <br><br>
-            <a v-for="(tag, index) in selectedRestaurant.description.split(',')" :key="index" class="ui label">
+            <a v-for="(tag, index) in selectedRestaurant.tags.split(',')" :key="index" class="ui label">
                 {{tag}}
             </a>
         </div>
@@ -36,7 +36,7 @@
                 geolocation: null,
                 selectedRestaurant: {
                     name: '',
-                    location: '',
+                    address: '',
                     description: ''
                 }
             }
@@ -88,7 +88,7 @@
 
             fetchRestaurantLocation: function (restaurant) {
                 fetch(
-                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.location }`, 
+                    `https://nominatim.openstreetmap.org/search?&format=json&limit=1&namedetails=1&q=${ restaurant.address }`, 
                     {
                         mode: 'no-cors',
                         cache: 'force-cache',
@@ -219,8 +219,8 @@
             selectedRestaurantMapUrl: function () {
                 let query = this.selectedRestaurant.name;
 
-                if (this.selectedRestaurant.location)
-                    query = `${query} ${this.selectedRestaurant.location}`
+                if (this.selectedRestaurant.address)
+                    query = `${query} ${this.selectedRestaurant.address}`
 
                 return `https://www.google.com/maps/search/?api=1&query=${query}`;
             }
